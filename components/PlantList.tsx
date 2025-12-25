@@ -51,7 +51,7 @@ const categories: Category[] = [
 
 export default function InteractiveCatalogSection() {
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden text-white">
+    <section id="rosliny" className="relative py-24 md:py-32 overflow-hidden text-white">
       <div className="absolute inset-0 -z-10">
         <Image
           src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?q=80&w=2000&auto=format&fit=crop"

@@ -5,7 +5,7 @@ import { FaTruck, FaWhatsapp, FaPhoneAlt, FaLeaf } from "react-icons/fa";
 
 export default function TransportSection() {
   return (
-    <section className="relative py-28 bg-white overflow-hidden">
+    <section id="transport" className="relative py-28 bg-white overflow-hidden">
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.03]"
         style={{

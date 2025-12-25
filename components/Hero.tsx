@@ -67,32 +67,42 @@ export default function Hero() {
                   </Link>
                 </div>
 
-                <div className="mt-6 grid grid-cols-3 gap-3 lg:hidden">
-                  <div className="flex flex-col items-center text-center gap-1.5 bg-white/10 backdrop-blur rounded-xl py-3">
-                    <div className="text-green-400 text-lg">
-                      <FaLeaf />
-                    </div>
-                    <span className="text-[11px] text-gray-200 font-medium">
-                      Duży wybór
-                    </span>
-                  </div>
+                <div className="lg:hidden mt-4 relative py-6 sm:py-0">
+                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-white/10 z-0 mx-2" />
 
-                  <div className="flex flex-col items-center text-center gap-1.5 bg-white/10 backdrop-blur rounded-xl py-3">
-                    <div className="text-green-400 text-lg">
-                      <FaUsers />
+                  <div className="flex justify-between items-stretch gap-2 relative z-10">
+                    <div className="flex-1 group">
+                      <div className="h-full flex flex-col items-center justify-center gap-3 p-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-colors group-hover:bg-white/10">
+                        <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-emerald-800 flex items-center justify-center shadow-[0_0_15px_rgba(22,163,74,0.3)]">
+                          <FaSeedling className="text-white text-sm" />
+                        </div>
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-green-200">
+                          Asortyment
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-[11px] text-gray-200 font-medium">
-                      Doradztwo
-                    </span>
-                  </div>
 
-                  <div className="flex flex-col items-center text-center gap-1.5 bg-white/10 backdrop-blur rounded-xl py-3">
-                    <div className="text-green-400 text-lg">
-                      <FaSeedling />
+                    <div className="flex-1 group">
+                      <div className="h-full flex flex-col items-center justify-center gap-3 p-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-colors group-hover:bg-white/10">
+                        <div className="relative w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-green-300 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                          <FaUsers className="text-sm" />
+                        </div>
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-white">
+                          Doradztwo
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-[11px] text-gray-200 font-medium">
-                      Jakość
-                    </span>
+
+                    <div className="flex-1 group">
+                      <div className="h-full flex flex-col items-center justify-center gap-3 p-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-colors group-hover:bg-white/10">
+                        <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-emerald-800 flex items-center justify-center shadow-[0_0_15px_rgba(22,163,74,0.3)]">
+                          <FaLeaf className="text-white text-sm" />
+                        </div>
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-green-200">
+                          Jakość
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

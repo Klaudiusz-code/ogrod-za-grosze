@@ -14,7 +14,7 @@ import {
 
 export default function AboutGardenSection() {
   return (
-    <section className="relative py-24 md:py-32 bg-white overflow-hidden">
+    <section id="onas" className="relative py-24 md:py-32 bg-white overflow-hidden">
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[1px] bg-gray-100" />
 
       <div className="max-w-[1600px] mx-auto px-6">

@@ -6,11 +6,7 @@ import {
   FaBars,
   FaTimes,
   FaLeaf,
-  FaHome,
   FaArrowRight,
-  FaInfoCircle,
-  FaSeedling,
-  FaEnvelope,
 } from "react-icons/fa";
 import { Poppins } from "next/font/google";
 
@@ -20,22 +16,30 @@ const poppins = Poppins({
 });
 
 const links = [
-  { name: "Strona główna", href: "#", icon: <FaHome /> },
-  { name: "Rośliny", href: "#rośliny", icon: <FaSeedling /> },
-  { name: "O nas", href: "#onas", icon: <FaInfoCircle /> },
-  { name: "Kontakt", href: "#kontakt", icon: <FaEnvelope /> },
+  { name: "Strona główna", href: "/" },
+  { name: "Asortyment", href: "rosliny" },
+  { name: "O nas", href: "onas" },
+  { name: "Kontakt", href: "kontakt" },
 ];
 
-const Header = () => {
+export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState("Strona główna");
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <header className={`${poppins.className} sticky top-0 z-50 bg-white/90 backdrop-blur-md`}>
       {/* MAIN BAR */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* LOGO */}
-        <a href="#" className="flex items-center gap-3 group">
+        <button
+          onClick={() => scrollToSection("home")}
+          className="flex items-center gap-3 group"
+        >
           <div className="relative w-11 h-11 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-200 transition-transform group-hover:scale-105">
             <FaLeaf className="text-white text-lg" />
           </div>
@@ -47,15 +51,17 @@ const Header = () => {
               Szkółka Roślin
             </span>
           </div>
-        </a>
+        </button>
 
         {/* DESKTOP NAV */}
-        <nav className="hidden md:flex items-center gap-8 z-50">
+        <nav className="hidden md:flex items-center gap-8 z-10">
           {links.map((link) => (
-            <a
+            <button
               key={link.name}
-              href={link.href}
-              onClick={() => setActive(link.name)}
+              onClick={() => {
+                scrollToSection(link.href);
+                setActive(link.name);
+              }}
               className={`relative text-[13px] font-medium transition ${
                 active === link.name ? "text-green-700" : "text-gray-600 hover:text-green-600"
               }`}
@@ -66,7 +72,7 @@ const Header = () => {
                   active === link.name ? "w-full" : "w-0 hover:w-full"
                 }`}
               />
-            </a>
+            </button>
           ))}
         </nav>
 
@@ -86,15 +92,15 @@ const Header = () => {
           </a>
 
           {/* HAMBURGER */}
-          <button className="md:hidden" onClick={() => setIsOpen(true)}>
+          <button className="md:hidden z-20" onClick={() => setIsOpen(true)}>
             <FaBars size={22} />
           </button>
         </div>
       </div>
 
       {/* MOBILE MENU */}
-      <div className={`fixed inset-0 z-50 overflow-hidden`}>
-        {/* OVERLAY */}
+      <div className="fixed inset-0 z-40 h hidden">
+        {/* Overlay */}
         <div
           className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
             isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
@@ -102,10 +108,10 @@ const Header = () => {
           onClick={() => setIsOpen(false)}
         />
 
-        {/* SIDE PANEL */}
+        {/* Side Panel */}
         <div
-          className={`absolute top-0 right-0 h-full w-[320px] max-w-[85vw] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col z-60 ${
-            isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"
+          className={`absolute top-0 right-0 h-full w-[320px] max-w-[85vw] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${
+            isOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
           {/* Mobile Header */}
@@ -125,10 +131,10 @@ const Header = () => {
           {/* Mobile Links */}
           <nav className="flex-1 overflow-y-auto py-6 px-6 flex flex-col gap-2">
             {links.map((link) => (
-              <a
+              <button
                 key={link.name}
-                href={link.href}
                 onClick={() => {
+                  scrollToSection(link.href);
                   setActive(link.name);
                   setIsOpen(false);
                 }}
@@ -136,7 +142,7 @@ const Header = () => {
               >
                 {link.name}
                 <FaArrowRight className="text-xs" />
-              </a>
+              </button>
             ))}
           </nav>
 
@@ -158,6 +164,4 @@ const Header = () => {
       </div>
     </header>
   );
-};
-
-export default Header;
+}
