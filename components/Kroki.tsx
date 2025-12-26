@@ -114,9 +114,9 @@ const ProcessSection: React.FC = () => {
               href="https://wa.me/123456789"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-8 py-4 bg-[#25D366] hover:bg-[#1ebc57] text-white rounded-full font-bold text-lg shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:-translate-y-1 whitespace-nowrap"
+              className="flex items-center gap-3 px-4 py-4 bg-[#25D366] hover:bg-[#1ebc57] text-white rounded-full font-bold text-lg shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:-translate-y-1 whitespace-nowrap"
             >
-              <FaWhatsapp className="text-2xl" />
+              <FaWhatsapp className="text-sm md:text-2xl" />
               Rozmawiaj na WhatsApp
               <FaArrowRight className="text-sm" />
             </a>
