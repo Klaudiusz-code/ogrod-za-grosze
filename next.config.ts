@@ -1,11 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["images.unsplash.com"], // <-- dodaj host Unsplash
+    domains: ["images.unsplash.com"],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "80", // jeśli Twój WP działa na porcie 80
+        pathname: "/wordpress/wp-content/uploads/**",
+      },
+    ],
   },
   experimental: {
     appDir: true,
   },
-}
+};
 
 module.exports = nextConfig;

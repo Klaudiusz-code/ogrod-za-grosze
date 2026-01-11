@@ -3,7 +3,29 @@
 import Image from "next/image";
 import { FaTruck, FaWhatsapp, FaPhoneAlt, FaLeaf } from "react-icons/fa";
 
-export default function TransportSection() {
+interface TransportItem {
+  transportTitle: string;
+}
+
+interface GlobalSettings {
+  whatsapp: string;       
+  numerTelefonu: string;  
+}
+
+interface Props {
+  items: TransportItem[];      
+  globalSettings: GlobalSettings;
+}
+
+export default function TransportSection({ items, globalSettings }: Props) {
+  const whatsappLink = globalSettings.whatsapp
+    ? `https://wa.me/${globalSettings.numerTelefonu.replace(/\s/g, "")}`
+    : "#";
+
+  const phoneLink = globalSettings.numerTelefonu
+    ? `tel:${globalSettings.numerTelefonu.replace(/\s/g, "")}`
+    : "#";
+
   return (
     <section id="transport" className="relative py-28 bg-white overflow-hidden">
       <div
@@ -40,25 +62,22 @@ export default function TransportSection() {
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
-              {[
-                "Transport na terenie miasta i okolic",
-                "Zabezpieczenie roślin na czas przewozu",
-                "Możliwość wniesienia na posesję",
-                "Termin ustalany indywidualnie",
-              ].map((item, i) => (
+              {items.map((item, i) => (
                 <div
                   key={i}
                   className="flex items-center gap-3 bg-gray-50 rounded-xl px-5 py-4 border border-gray-100"
                 >
                   <span className="w-2 h-2 rounded-full bg-green-600" />
-                  <span className="text-gray-700 font-medium">{item}</span>
+                  <span className="text-gray-700 font-medium">
+                    {item.transportTitle}
+                  </span>
                 </div>
               ))}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href="https://wa.me/48123456789"
+                href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 px-8 py-4 bg-[#25D366] text-white font-bold rounded-xl transition hover:bg-[#1ebc57] hover:shadow-[0_10px_30px_rgba(37,211,102,0.4)]"
@@ -68,7 +87,7 @@ export default function TransportSection() {
               </a>
 
               <a
-                href="tel:+48123456789"
+                href={phoneLink}
                 className="flex items-center justify-center gap-3 px-8 py-4 border-2 border-green-700 text-green-700 font-bold rounded-xl transition hover:bg-green-700 hover:text-white"
               >
                 <FaPhoneAlt />

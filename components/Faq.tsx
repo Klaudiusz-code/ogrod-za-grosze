@@ -3,36 +3,26 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { FaLeaf, FaWhatsapp, FaPlus, FaCommentDots } from "react-icons/fa";
+import { useGlobalSettings } from "@/components/GlobalSettingsContext";
 
-const faqItems = [
-  {
-    question: "Jakie rośliny są aktualnie dostępne?",
-    answer:
-      "W naszej szkółce znajdziesz drzewa, krzewy i rośliny ozdobne dostosowane do sezonu. Zapraszamy do kontaktu telefonicznego lub WhatsApp w celu sprawdzenia dostępności.",
-  },
-  {
-    question: "Czy oferujecie doradztwo przy wyborze roślin?",
-    answer:
-      "Tak! Nasi specjaliści pomogą Ci dobrać rośliny odpowiednie do Twojego ogrodu, uwzględniając warunki glebowe i nasłonecznienie.",
-  },
-  {
-    question: "Jak mogę złożyć zamówienie?",
-    answer:
-      "Zamówienia przyjmujemy telefonicznie, przez WhatsApp lub osobiście w naszej szkółce. Możliwe jest także wcześniejsze rezerwowanie roślin.",
-  },
-  {
-    question: "Czy rośliny można odebrać osobiście lub zamówić dostawę?",
-    answer:
-      "Oferujemy odbiór osobisty w szkółce oraz dostawę na terenie miasta i okolic. Skontaktuj się z nami, aby ustalić szczegóły dostawy.",
-  },
-];
+interface FaqItem {
+  question: string;
+  answer: string;
+}
 
-export default function FaqSection() {
+interface FaqProps {
+  items: FaqItem[];
+}
+
+export default function FaqSection({ items }: FaqProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const { whatsapp } = useGlobalSettings();
 
   const toggleIndex = (index: number) => {
     setActiveIndex((prev) => (prev === index ? null : index));
   };
+
+  if (!items.length) return null;
 
   return (
     <section className="relative z-10 py-24 bg-white overflow-hidden">
@@ -46,12 +36,11 @@ export default function FaqSection() {
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          {/* LEWA KOLUMNA */}
           <div className="relative">
             <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl">
               <Image
                 src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?q=80&w=1000&auto=format&fit=crop"
-                alt="Ekspert doradzający"
+                alt="Doradztwo"
                 fill
                 className="object-cover"
               />
@@ -61,22 +50,23 @@ export default function FaqSection() {
               <div className="absolute bottom-0 left-0 w-full p-8">
                 <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6">
                   <h3 className="text-white font-bold text-xl mb-2">
-                    Masz wątpliwości?
+                    Masz pytania?
                   </h3>
                   <p className="text-gray-200 text-sm mb-4">
-                    Nasi eksperci pomogą Ci dobrać idealną roślinę do Twojego
-                    ogrodu.
+                    Skontaktuj się z nami – chętnie pomożemy.
                   </p>
 
-                  <a
-                    href="https://wa.me/48123456789"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-[#25D366] text-white font-bold rounded-xl transition hover:bg-[#1ebc57]"
-                  >
-                    <FaWhatsapp />
-                    Porozmawiajmy
-                  </a>
+                  {whatsapp && (
+                    <a
+                      href={`https://wa.me/${whatsapp.replace(/\D/g, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full py-3 bg-[#25D366] text-white font-bold rounded-xl hover:bg-[#1ebc57]"
+                    >
+                      <FaWhatsapp />
+                      WhatsApp
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -93,22 +83,22 @@ export default function FaqSection() {
                   <FaCommentDots />
                 </div>
                 <span className="text-xs font-bold uppercase tracking-widest text-green-600">
-                  Pytania & Odpowiedzi
+                  FAQ
                 </span>
               </div>
 
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Czego się często <br />
-                <span className="text-green-600">pytasz?</span>
+                Najczęstsze <br />
+                <span className="text-green-600">pytania</span>
               </h2>
 
-              <p className="text-gray-500 max-w-md">
+              <p className="text-gray-500">
                 Kliknij pytanie, aby zobaczyć odpowiedź.
               </p>
             </div>
 
             <div className="flex flex-col gap-3">
-              {faqItems.map((item, index) => {
+              {items.map((item, index) => {
                 const isOpen = activeIndex === index;
 
                 return (
@@ -133,10 +123,10 @@ export default function FaqSection() {
                       </span>
 
                       <span
-                        className={`w-8 h-8 flex items-center justify-center rounded-full border transition ${
+                        className={`w-8 h-8 flex items-center justify-center rounded-full  transition ${
                           isOpen
-                            ? "rotate-45 border-green-200 bg-green-50 text-green-600"
-                            : "border-gray-200 text-gray-400"
+                            ? "rotate-45   text-green-600"
+                            : " text-gray-400"
                         }`}
                       >
                         <FaPlus className="text-sm" />

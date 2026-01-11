@@ -1,19 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import {
-  FaPhoneAlt,
-  FaBars,
-  FaTimes,
-  FaLeaf,
-  FaArrowRight,
-} from "react-icons/fa";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { FaPhoneAlt, FaBars, FaTimes, FaLeaf, FaArrowRight } from "react-icons/fa";
 import { Poppins } from "next/font/google";
+import { useGlobalSettings } from "./GlobalSettingsContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
+
+interface HeaderGlobalSettings {
+  logo?: string;
+  numerTelefonu: string;
+  emailKontaktowy?: string;
+  whatsapp?: string;
+  adres?: string;
+  godzinyOtwarcia?: string;
+  otwarteTeraz?: boolean;
+  facebook?: string;
+  instagram?: string;
+}
 
 const links = [
   { name: "Strona główna", href: "/" },
@@ -26,142 +34,186 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState("Strona główna");
 
+  const settings = useGlobalSettings() as HeaderGlobalSettings;
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.overflowX = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (id === "/") window.scrollTo({ top: 0, behavior: "smooth" });
+    else
+      document
+        .getElementById(id)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setIsOpen(false);
   };
 
   return (
-    <header className={`${poppins.className} sticky top-0 z-50 bg-white/90 backdrop-blur-md`}>
-      {/* MAIN BAR */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* LOGO */}
-        <button
-          onClick={() => scrollToSection("home")}
-          className="flex items-center gap-3 group"
-        >
-          <div className="relative w-11 h-11 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-200 transition-transform group-hover:scale-105">
-            <FaLeaf className="text-white text-lg" />
-          </div>
-          <div className="flex flex-col leading-none">
-            <span className="text-lg font-bold text-gray-700 tracking-tight">
-              Ogród Za Grosze
-            </span>
-            <span className="text-xs font-semibold text-green-600 uppercase tracking-widest mt-0.5">
-              Szkółka Roślin
-            </span>
-          </div>
-        </button>
-
-        {/* DESKTOP NAV */}
-        <nav className="hidden md:flex items-center gap-8 z-10">
-          {links.map((link) => (
-            <button
-              key={link.name}
-              onClick={() => {
-                scrollToSection(link.href);
-                setActive(link.name);
-              }}
-              className={`relative text-[13px] font-medium transition ${
-                active === link.name ? "text-green-700" : "text-gray-600 hover:text-green-600"
-              }`}
-            >
-              {link.name}
-              <span
-                className={`absolute left-0 -bottom-1 h-[1px] bg-green-600 transition-all duration-300 ${
-                  active === link.name ? "w-full" : "w-0 hover:w-full"
-                }`}
+    <>
+      <header className={`${poppins.className} sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100/50 shadow-sm transition-all duration-300`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          
+          <button onClick={() => scrollToSection("/")} className="group focus:outline-none">
+            {settings.logo ? (
+              <Image
+                src={settings.logo}
+                alt="Ogród Za Grosze"
+                width={160}
+                height={40}
+                className="object-contain h-14 w-auto transition-transform duration-300 group-hover:scale-105"
+                priority
               />
-            </button>
-          ))}
-        </nav>
-
-        {/* RIGHT */}
-        <div className="flex items-center gap-4">
-          <a
-            href="tel:+48123456789"
-            className="hidden lg:flex items-center gap-3 pl-2 pr-5 py-2 rounded-full border border-gray-200 hover:border-green-500 transition"
-          >
-            <span className="w-9 h-9 rounded-full bg-green-600 text-white flex items-center justify-center">
-              <FaPhoneAlt size={14} />
-            </span>
-            <span className="flex flex-col leading-tight">
-              <span className="text-[11px] text-gray-500">Zadzwoń teraz</span>
-              <span className="text-sm font-medium text-gray-800">+48 123 456 789</span>
-            </span>
-          </a>
-
-          {/* HAMBURGER */}
-          <button className="md:hidden z-20" onClick={() => setIsOpen(true)}>
-            <FaBars size={22} />
+            ) : (
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white">
+                  <FaLeaf size={16} />
+                </div>
+                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-700 to-teal-600">
+                  Ogród Za Grosze
+                </span>
+              </div>
+            )}
           </button>
-        </div>
-      </div>
 
-      {/* MOBILE MENU */}
-      <div className="fixed inset-0 z-40 h hidden">
-        {/* Overlay */}
-        <div
-          className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
-            isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-          }`}
-          onClick={() => setIsOpen(false)}
-        />
-
-        {/* Side Panel */}
-        <div
-          className={`absolute top-0 right-0 h-full w-[320px] max-w-[85vw] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${
-            isOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          {/* Mobile Header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <FaLeaf className="text-green-600 text-xl" />
-              <span className="font-bold text-gray-900 text-lg">Menu</span>
-            </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-2 -mr-2 text-gray-400 hover:text-gray-800 transition-colors"
-            >
-              <FaTimes size={24} />
-            </button>
-          </div>
-
-          {/* Mobile Links */}
-          <nav className="flex-1 overflow-y-auto py-6 px-6 flex flex-col gap-2">
+          <nav className="hidden md:flex items-center gap-10 z-10">
             {links.map((link) => (
               <button
                 key={link.name}
                 onClick={() => {
                   scrollToSection(link.href);
                   setActive(link.name);
-                  setIsOpen(false);
                 }}
-                className="flex items-center justify-between py-3 text-lg font-medium text-gray-700 hover:text-green-600 border-b border-gray-50 transition-colors"
+                className={`relative text-sm font-medium transition-all duration-300 py-2 ${
+                  active === link.name
+                    ? "text-emerald-700 font-semibold"
+                    : "text-gray-600 hover:text-emerald-600"
+                }`}
               >
                 {link.name}
-                <FaArrowRight className="text-xs" />
+                {active === link.name && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                )}
               </button>
             ))}
           </nav>
 
-          {/* Mobile Footer CTA */}
-          <div className="p-6 bg-gray-50 border-t border-gray-100">
+          <div className="flex items-center gap-3">
             <a
-              href="tel:+48123456789"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center justify-center w-full gap-3 py-4 bg-green-600 text-white rounded-xl font-bold shadow-lg shadow-green-200 hover:bg-green-700 transition-all"
+              href={`tel:${settings.numerTelefonu}`}
+              className="hidden lg:flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-100 transition-all duration-300 group"
             >
-              <FaPhoneAlt size={18} />
-              <span>Zadzwoń teraz</span>
+              <span className="w-8 h-8 rounded-full bg-white text-emerald-600 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                <FaPhoneAlt size={12} />
+              </span>
+              <div className="flex flex-col leading-tight">
+                <span className="text-[10px] uppercase tracking-wider text-emerald-500/80 font-semibold">Zadzwoń teraz</span>
+                <span className="text-sm font-bold">{settings.numerTelefonu}</span>
+              </div>
             </a>
-            <p className="text-center text-xs text-gray-400 mt-4">
-              Czynne Pon-Sob: 8:00 - 17:00
-            </p>
+
+            <button 
+              className="md:hidden z-20 p-2 text-gray-700 hover:text-emerald-600 focus:outline-none transition-colors" 
+              onClick={() => setIsOpen(true)}
+              aria-label="Otwórz menu"
+            >
+              <FaBars size={24} />
+            </button>
           </div>
         </div>
+      </header>
+
+      <div
+        className={`fixed inset-0 z-[100] bg-white flex flex-col transition-all duration-500 ease-in-out ${
+          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-full"
+        }`}
+      >
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-32 -right-32 w-96 h-96 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" />
+          <div className="absolute top-32 -left-32 w-96 h-96 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
+        </div>
+
+        <div className="relative flex items-center justify-between px-6 py-6 z-10">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white">
+              <FaLeaf size={16} />
+            </div>
+            <span className="font-bold text-gray-900 text-lg tracking-tight">Menu</span>
+          </div>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="p-3 rounded-full bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 transition-all duration-300 focus:outline-none"
+            aria-label="Zamknij menu"
+          >
+            <FaTimes size={22} />
+          </button>
+        </div>
+
+        <nav className="relative flex-1 flex flex-col justify-center items-center gap-6 px-6 z-10 overflow-hidden">
+          {links.map((link, index) => (
+            <button
+              key={link.name}
+              onClick={() => scrollToSection(link.href)}
+              className="group relative w-full text-center"
+              style={{
+                opacity: isOpen ? 1 : 0,
+                transform: isOpen ? 'translateY(0)' : 'translateY(20px)',
+                transition: `all 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 100}ms`
+              }}
+            >
+              <span className="text-3xl md:text-4xl font-bold text-gray-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-600 group-hover:to-teal-600 transition-all duration-300 block py-2">
+                {link.name}
+              </span>
+              <span className="h-0.5 w-0 bg-emerald-500 mx-auto group-hover:w-12 transition-all duration-300 rounded-full" />
+            </button>
+          ))}
+        </nav>
+
+        <div className="relative px-6 pb-10 pt-6 z-10">
+          <a
+            href={`tel:${settings.numerTelefonu}`}
+            className="group flex items-center justify-center w-full gap-3 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-2xl font-bold shadow-xl shadow-emerald-200 hover:shadow-emerald-300 hover:-translate-y-1 transition-all duration-300"
+          >
+            <FaPhoneAlt size={20} className="group-hover:rotate-12 transition-transform" />
+            <span>Zadzwoń teraz</span>
+            <FaArrowRight size={16} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+          </a>
+          
+          {settings.godzinyOtwarcia && (
+            <div className="mt-6 flex items-center justify-center gap-2 text-gray-500">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <p className="text-sm font-medium">
+                Otwarte: {settings.godzinyOtwarcia}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
-    </header>
+      
+      <style jsx global>{`
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+      `}</style>
+    </>
   );
 }

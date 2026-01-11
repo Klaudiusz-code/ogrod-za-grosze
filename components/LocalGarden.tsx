@@ -4,17 +4,68 @@ import React from "react";
 import Image from "next/image";
 import {
   FaLeaf,
+  FaCheckCircle,
+  FaSmile,
   FaPhoneAlt,
   FaMapMarkerAlt,
   FaClock,
-  FaAward,
-  FaTree,
-  FaHeart,
+  FaSeedling,
 } from "react-icons/fa";
+import { isOpenNow } from "@/utils/isOpenNow";
 
-export default function AboutGardenSection() {
+interface GlobalSettings {
+  whatsapp: string;
+  numerTelefonu: string;
+  adres?: string;
+  godzinyOtwarcia?: string;
+}
+
+interface AboutSchoolData {
+  tytulSekcji: string;
+  opisGlowny: string;
+  lataDoswiadczenia: string;
+  gwarancjaJakosci: string;
+  zadowoleniKlienci: string;
+  liczbaOdmianRoslin: string;
+}
+
+interface AboutGardenSectionProps {
+  globalSettings: GlobalSettings;
+  aboutSchoolData: AboutSchoolData;
+}
+
+export default function AboutGardenSection({
+  globalSettings,
+  aboutSchoolData,
+}: AboutGardenSectionProps) {
+  const stats = [
+    {
+      label: "Lat doświadczenia",
+      value: aboutSchoolData.lataDoswiadczenia,
+      icon: FaClock,
+    },
+    {
+      label: "Gwarancja jakości",
+      value: aboutSchoolData.gwarancjaJakosci,
+      icon: FaCheckCircle,
+    },
+    {
+      label: "Zadowolonych klientów",
+      value: aboutSchoolData.zadowoleniKlienci,
+      icon: FaSmile,
+    },
+    {
+      label: "Odmian roślin",
+      value: aboutSchoolData.liczbaOdmianRoslin,
+      icon: FaSeedling,
+    },
+  ];
+
   return (
-    <section id="onas" className="relative py-24 md:py-32 bg-white overflow-hidden">
+    <section
+      id="onas"
+      className="relative py-24 md:py-32 bg-white overflow-hidden"
+    >
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[1px] bg-gray-100" />
 
       <div className="max-w-[1600px] mx-auto px-6">
@@ -29,7 +80,7 @@ export default function AboutGardenSection() {
 
             <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-white/50 shadow-lg hidden md:block">
               <p className="text-2xl font-serif font-bold text-green-800">
-                "Jakość to nasza pasja, nie obowiązek."
+                "{aboutSchoolData.tytulSekcji}"
               </p>
               <p className="text-sm text-gray-500 mt-2 font-medium">
                 — Założyciel szkółki
@@ -49,44 +100,40 @@ export default function AboutGardenSection() {
               </div>
 
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-[1.1]">
-                Pielęgnujemy <br />
+                {aboutSchoolData.tytulSekcji} <br />
                 <span className="text-green-700 italic font-serif">
                   tradycję od pokoleń
                 </span>
               </h2>
 
               <p className="text-lg text-gray-600 leading-relaxed">
-                Szkółka w Aleksandrowie to nie tylko sprzedaż. To miejsce, gdzie
-                rośliny mają czas zakorzenić się, a my znamy każdą z nich z
-                imienia. Dostarczamy zdrowe, aklimatyzowane sadzonki, które z
-                powodzeniem przyjmą się w Twoim ogrodzie.
+                {aboutSchoolData.opisGlowny}
               </p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-b border-gray-100 py-8">
-              {[
-                { number: "15+", label: "Lat doświadczenia", icon: FaTree },
-                { number: "100%", label: "Gwarancja jakości", icon: FaAward },
-                {
-                  number: "5k+",
-                  label: "Zadowolonych klientów",
-                  icon: FaHeart,
-                },
-                { number: "300+", label: "Odmian roślin", icon: FaLeaf },
-              ].map((stat, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col items-center md:items-start text-center md:text-left group cursor-default"
-                >
-                  <stat.icon className="text-green-200 text-2xl mb-2 group-hover:text-green-600 transition-colors duration-300" />
-                  <span className="text-2xl md:text-3xl font-bold text-gray-900">
-                    {stat.number}
-                  </span>
-                  <span className="text-xs font-bold uppercase text-gray-500 tracking-wider mt-1">
-                    {stat.label}
-                  </span>
-                </div>
-              ))}
+              {stats.map((stat, i) => {
+                const Icon = stat.icon;
+
+                return (
+                  <div
+                    key={i}
+                    className="flex flex-col items-center md:items-start text-center md:text-left group cursor-default"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-green-700 mb-2 group-hover:scale-110 transition-transform">
+                      <Icon />
+                    </div>
+
+                    <span className="text-xs font-bold uppercase text-gray-500 tracking-wider">
+                      {stat.label}
+                    </span>
+
+                    <span className="text-lg md:text-xl font-bold text-gray-900 mt-1">
+                      {stat.value}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="bg-[#0f172a] rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-2xl text-white">
@@ -102,31 +149,41 @@ export default function AboutGardenSection() {
 
                   <div className="pt-4 space-y-3">
                     <a
-                      href="tel:+48123456789"
+                      href={`tel:${globalSettings.numerTelefonu}`}
                       className="flex items-center gap-3 text-white hover:text-green-400 transition-colors"
                     >
                       <FaPhoneAlt className="text-green-500" />
-                      <span className="font-medium">+48 123 456 789</span>
-                    </a>
-                    <a
-                      href="#"
-                      className="flex items-center gap-3 text-white hover:text-green-400 transition-colors"
-                    >
-                      <FaMapMarkerAlt className="text-green-500" />
                       <span className="font-medium">
-                        Aleksandrów, ul. Cicha 20
+                        {globalSettings.numerTelefonu}
                       </span>
                     </a>
+                    {globalSettings.adres && (
+                      <a
+                        href="#"
+                        className="flex items-center gap-3 text-white hover:text-green-400 transition-colors"
+                      >
+                        <FaMapMarkerAlt className="text-green-500" />
+                        <span className="font-medium">
+                          {globalSettings.adres}
+                        </span>
+                      </a>
+                    )}
                   </div>
                 </div>
 
                 <div className="flex flex-col justify-center items-start md:items-end space-y-3">
-                  <div className="flex items-center gap-2 text-green-400 text-sm font-medium bg-white/10 px-4 py-1.5 rounded-full border border-white/10">
-                    <FaClock />
-                    Czynne Pon-Sob
-                  </div>
+                  {globalSettings.godzinyOtwarcia && (
+                    <div className="flex items-center gap-2 text-green-400 text-sm font-medium bg-white/10 px-4 py-1.5 rounded-full border border-white/10">
+                      <FaClock />
+                      {isOpenNow(globalSettings.godzinyOtwarcia)
+                        ? "Otwarte teraz"
+                        : "Zamknięte"}
+                    </div>
+                  )}
                   <a
-                    href="https://wa.me/48123456789"
+                    href={`https://wa.me/${(
+                      globalSettings.numerTelefonu || ""
+                    ).replace(/\D/g, "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebc57] text-white px-6 py-3 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(37,211,102,0.5)]"

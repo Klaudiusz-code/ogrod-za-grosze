@@ -1,51 +1,27 @@
 "use client";
 
-import React from "react";
-import { FaComments, FaThList, FaTruck, FaWhatsapp, FaArrowRight } from "react-icons/fa";
+import { FaComments, FaWhatsapp, FaArrowRight, FaUsers, FaSeedling } from "react-icons/fa";
+import { useGlobalSettings } from "../components/GlobalSettingsContext";
 
 interface Step {
-  id: string;
-  title: string;
   description: string;
-  iconType: "comments" | "list" | "truck";
+  opisKroku: string;   
 }
 
-const stepsData: Step[] = [
-  {
-    id: "01",
-    title: "Doradztwo",
-    description:
-      "Opowiedz nam o swoim ogrodzie. Dobierzemy rośliny idealnie pasujące do Twojej gleby i warunków.",
-    iconType: "comments",
-  },
-  {
-    id: "02",
-    title: "Wybór",
-    description:
-      "Oglądnij zdrowe, dorodne okazy wprost z naszych tuneli foliowych i pól uprawnych.",
-    iconType: "list",
-  },
-  {
-    id: "03",
-    title: "Realizacja",
-    description:
-      "Zajmiemy się transportem i sadzeniem. Wystarczy, że cieszysz się nowym ogrodem.",
-    iconType: "truck",
-  },
-];
+interface ProcessSectionProps {
+  steps: Step[];
+}
 
-const ProcessSection: React.FC = () => {
-  const renderIcon = (type: Step["iconType"]) => {
-    switch (type) {
-      case "comments":
-        return <FaComments />;
-      case "list":
-        return <FaThList />;
-      case "truck":
-        return <FaTruck />;
-      default:
-        return null;
-    }
+export default function ProcessSection({ steps }: ProcessSectionProps) {
+  const settings = useGlobalSettings();
+
+  if (!settings) return null;
+
+  const icons = [FaComments, FaUsers, FaSeedling];
+
+  const renderIcon = (index: number) => {
+    const Icon = icons[index];
+    return Icon ? <Icon /> : null;
   };
 
   return (
@@ -65,8 +41,7 @@ const ProcessSection: React.FC = () => {
             Jak wygląda współpraca?
           </h2>
           <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-            Nie musisz być ekspertem. Przeprowadzimy Cię przez cały proces – od pierwszej
-            rozmowy do ostatniego dociśnięcia ziemi.
+            Nie musisz być ekspertem. Przeprowadzimy Cię przez cały proces – od pierwszej rozmowy do ostatniego dociśnięcia ziemi.
           </p>
         </div>
 
@@ -74,21 +49,21 @@ const ProcessSection: React.FC = () => {
           <div className="hidden lg:block absolute top-12 left-[16%] right-[16%] h-[2px] border-t-2 border-dashed border-gray-300 z-0" />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-            {stepsData.map((step) => (
-              <div key={step.id} className="relative group">
+            {steps.map((step, index) => (
+              <div key={index} className="relative group">
                 <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 h-full relative transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-green-200">
                   <div className="absolute -top-4 -right-4 text-[120px] font-black text-gray-50 leading-none select-none group-hover:text-green-50/30 transition-colors">
-                    {step.id}
+                    {index + 1 < 10 ? `0${index + 1}` : index + 1}
                   </div>
 
                   <div className="relative w-16 h-16 bg-green-50 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300 shadow-sm">
-                    {renderIcon(step.iconType)}
+                    {renderIcon(index)}
                   </div>
 
                   <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-green-700 transition-colors">
-                    {step.title}
+                    {step.description}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                  <p className="text-gray-600 leading-relaxed">{step.opisKroku}</p>
 
                   <div className="hidden md:block absolute top-12 -right-1/2 w-[calc(100%-3rem)] h-[2px] border-t-2 border-dashed border-transparent group-hover:border-green-300 transition-colors" />
                 </div>
@@ -111,7 +86,7 @@ const ProcessSection: React.FC = () => {
             </div>
 
             <a
-              href="https://wa.me/123456789"
+              href={`https://wa.me/${settings.numerTelefonu.replace(/\D/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 px-4 py-4 bg-[#25D366] hover:bg-[#1ebc57] text-white rounded-full font-bold text-lg shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:-translate-y-1 whitespace-nowrap"
@@ -125,6 +100,4 @@ const ProcessSection: React.FC = () => {
       </div>
     </section>
   );
-};
-
-export default ProcessSection;
+}
