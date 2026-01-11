@@ -6,7 +6,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: "localhost",
+        hostname: "vps-e1257184.vps.ovh.net",
         port: "80", // jeśli Twój WP działa na porcie 80
         pathname: "/wordpress/wp-content/uploads/**",
       },
