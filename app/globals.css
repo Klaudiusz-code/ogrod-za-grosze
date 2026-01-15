@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-
+htm{
+  scroll-behavior: smooth;
+}
 .prose {
   color: #1f2937; 
   line-height: 1.8;

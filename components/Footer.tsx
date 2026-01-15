@@ -229,7 +229,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Dolna stopka */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs md:text-sm text-emerald-200/50">
           <div className="text-center md:text-left">
             © {currentYear} Szkółka Roślin Aleksandrów. Wszelkie prawa

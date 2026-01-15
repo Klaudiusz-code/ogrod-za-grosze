@@ -61,28 +61,50 @@ export default function NewArrivalsMobileOptimized({ items }: NewArrivalsProps) 
         <div className="relative z-10">
           <Swiper
             onSwiper={setSwiper}
+            
+            // POPRAWKA 1: Wygładzenie ruchu (dłuższy czas animacji)
+            speed={800}
+            
             spaceBetween={20}
             slidesPerView={1.1}
             grabCursor={true}
-            loop={items.length > 2} 
+            loop={items.length > 2}
+            
+            // POPRAWKA 2: Kluczowe dla płynności przy ułamkowych slajdach i loop
+            watchSlidesProgress={true} 
+            
+            // Reakcja na ładowanie obrazów
+            observer={true} 
+            observeParents={true}
+            
+            // Zabezpieczenie przed konfliktami przy szybkim klikaniu
+            preventInteractionOnTransition={true}
+            
             autoplay={{ delay: 4000, disableOnInteraction: false }}
+            
             pagination={{
               clickable: true,
               dynamicBullets: true,
               renderBullet: (index, className) => `<span class="${className} !bg-white w-1.5 h-1.5 !opacity-30 !mx-1"></span>`,
             }}
+            
             modules={[Pagination, Autoplay]}
+            
             breakpoints={{
-              640: { slidesPerView: 1.4 },
-              1024: { slidesPerView: 2.5 },
-              1280: { slidesPerView: 3 },
+              640: { slidesPerView: 1.4, spaceBetween: 20 },
+              1024: { slidesPerView: 2.5, spaceBetween: 30 },
+              1280: { slidesPerView: 3, spaceBetween: 40 },
             }}
             className="!overflow-visible"
           >
             {items.map((item) => (
               <SwiperSlide key={item.id} className="!h-auto py-4 pb-12">
-                <div className="group relative h-[400px] md:h-[600px] w-full bg-neutral-900 rounded-3xl overflow-hidden cursor-pointer border border-neutral-800">
-                  <div className="absolute inset-0">
+                {/* POPRAWKA 3: Styl inline wymuszający sprzętowe przyspieszenie GPU (naprawia "szarpanie" obrazków przy ruchu) */}
+                <div 
+                  className="group relative h-[400px] md:h-[600px] w-full bg-neutral-900 rounded-3xl overflow-hidden cursor-pointer border border-neutral-800"
+                  style={{ willChange: 'transform' }}
+                >
+                  <div className="absolute inset-0" style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}>
                     <Image
                       src={item.image}
                       alt={item.title}

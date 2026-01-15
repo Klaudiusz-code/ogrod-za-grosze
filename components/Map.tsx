@@ -21,6 +21,10 @@ const MapSection = () => {
     ? encodeURIComponent(adres)
     : "";
 
+  const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3158.04575934652!2d22.92893247694208!3d50.46598078624492!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47234d440695d4f3%3A0x30ca4a010e011765!2zU3prw7PFgmthIGRyemV3ZWsgaSBrcnpld8Ozdw!5e1!3m2!1spl!2spl!4v1768512737941!5m2!1spl!2spl";
+
+  const formattedHours = godzinyOtwarcia ? godzinyOtwarcia.replace(/, /g, '\n') : "";
+
   return (
     <section
       id="kontakt"
@@ -41,9 +45,11 @@ const MapSection = () => {
           <div className="lg:col-span-7 relative h-[400px] lg:h-[700px] group overflow-hidden">
             <iframe
               title="Lokalizacja"
-              src={`https://www.google.com/maps?q=${encodedAddress}&output=embed`}
+              src={mapEmbedUrl}
               className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700"
               loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
             />
 
             {otwarteTeraz && (
@@ -95,8 +101,9 @@ const MapSection = () => {
                       Godziny otwarcia
                     </span>
                   </div>
-                  <div className="pl-9 border-l border-white/10 text-gray-300">
-                    {godzinyOtwarcia}
+                  {/* ZMIANA: Dodana klasa whitespace-pre-line i użycie formattedHours */}
+                  <div className="pl-9 border-l border-white/10 text-gray-300 whitespace-pre-line">
+                    {formattedHours}
                   </div>
                 </div>
               )}
