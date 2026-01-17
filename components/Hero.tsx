@@ -49,7 +49,6 @@ export default function Hero({ kafelki }: HeroProps) {
           <div className="relative z-10 w-full mt-16">
             <div className="max-w-7xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-10">
               
-              {/* LEWA KOLUMNA */}
               <div className="text-white max-w-xl pb-8 md:pb-0">
                 <span className="inline-block mb-3 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur text-[10px] tracking-[0.25em] uppercase text-green-300">
                   Lokalna szkółka • Aleksandrów
@@ -64,7 +63,6 @@ export default function Hero({ kafelki }: HeroProps) {
                   Doradzimy i pomożemy wybrać najlepiej.
                 </p>
 
-                {/* --- MOBILE TILES (Rząd poziomy, minimalizm) --- */}
                 <div className="flex lg:hidden w-full gap-3 mb-8">
                   {Array.isArray(kafelki) &&
                     kafelki.map((item, index) => {
@@ -92,7 +90,6 @@ export default function Hero({ kafelki }: HeroProps) {
                       );
                     })}
                 </div>
-                {/* --- KONIEC MOBILE TILES --- */}
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                   <Link
