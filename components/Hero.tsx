@@ -124,7 +124,6 @@ export default function Hero({ kafelki }: HeroProps) {
                 </div>
               </div>
 
-              {/* PRAWA KOLUMNA - ORYGINAŁ (DESKTOP) */}
               <div className="hidden lg:flex flex-col gap-5 justify-center">
                 {Array.isArray(kafelki) &&
                   kafelki.map((item, index) => {
