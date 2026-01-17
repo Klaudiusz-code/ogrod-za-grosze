@@ -1,26 +1,20 @@
+// app/page.tsx
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 import { client } from "@/lib/client";
 import { gql } from "@apollo/client";
 import HomeClient from "./HomeClient";
 import { Metadata } from "next";
 
-interface SeoResponse {
-  page: {
-    seo: {
-      title: string;
-      description: string;
-      openGraph?: {
-        title?: string;
-        description?: string;
-      };
-    } | null;
-  } | null;
-}
-
+/* =========================
+   SEO
+========================= */
 export async function generateMetadata(): Promise<Metadata> {
-  const { data } = await client.query<SeoResponse>({
+  const { data } = await client.query({
     query: gql`
       query SeoHome {
-        page(id: "cG9zdDoxOQ==") {
+        pageBy(uri: "/") {
           seo {
             title
             description
@@ -32,33 +26,37 @@ export async function generateMetadata(): Promise<Metadata> {
         }
       }
     `,
+    fetchPolicy: "no-cache",
   });
 
-  const title = data?.page?.seo?.title || "Szkółka roślin i krzewów w Aleksandrowie";
-  const description =
-    data?.page?.seo?.description || "Szkółka roślin i krzewów w Aleksandrowie";
+  // @ts-ignore
 
-  const ogTitle = data?.page?.seo?.openGraph?.title || title;
-  const ogDescription =
-    data?.page?.seo?.openGraph?.description || description;
+  const seo = data?.pageBy?.seo;
+
+  const title = seo?.title || "Szkółka roślin i krzewów w Aleksandrowie";
+  const description =
+    seo?.description || "Szkółka roślin i krzewów w Aleksandrowie";
 
   return {
     title,
     description,
     openGraph: {
-      title: ogTitle,
-      description: ogDescription,
+      title: seo?.openGraph?.title || title,
+      description: seo?.openGraph?.description || description,
       type: "website",
       locale: "pl_PL",
     },
   };
 }
 
+/* =========================
+   PAGE DATA
+========================= */
 export default async function Page() {
-  const { data }: any = await client.query({
+  const { data } = await client.query({
     query: gql`
       query HomePage {
-        page(id: "cG9zdDoxOQ==") {
+        pageBy(uri: "/") {
           globalneUstawieniaStrony {
             logo {
               node {
@@ -84,6 +82,7 @@ export default async function Page() {
             liczbaOdmianRoslin
           }
         }
+
         kafelkiStartowe {
           edges {
             node {
@@ -94,6 +93,7 @@ export default async function Page() {
             }
           }
         }
+
         krokWspPracy {
           edges {
             node {
@@ -104,6 +104,7 @@ export default async function Page() {
             }
           }
         }
+
         rosliny {
           nodes {
             id
@@ -118,6 +119,7 @@ export default async function Page() {
             }
           }
         }
+
         transportItems {
           nodes {
             transportroslin {
@@ -125,6 +127,7 @@ export default async function Page() {
             }
           }
         }
+
         assortmentBoxes {
           nodes {
             asortymentBox {
@@ -135,6 +138,7 @@ export default async function Page() {
             }
           }
         }
+
         galleries {
           nodes {
             zdjecia {
@@ -147,6 +151,7 @@ export default async function Page() {
             }
           }
         }
+
         faqs {
           nodes {
             pytanka {
@@ -157,6 +162,7 @@ export default async function Page() {
         }
       }
     `,
+    fetchPolicy: "no-cache",
   });
 
   return <HomeClient data={data} />;

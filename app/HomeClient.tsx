@@ -15,8 +15,13 @@ import Footer from "@/components/Footer";
 import { GlobalSettingsProvider } from "@/components/GlobalSettingsContext";
 import { FaLeaf } from "react-icons/fa";
 
-export default function HomeClient({ data }: any) {
-  const settings = data.page.globalneUstawieniaStrony;
+export default function HomeClient({ data }: { data: any }) {
+  if (!data?.pageBy) {
+    console.error("❌ pageBy is null – sprawdź URI strony głównej", data);
+    return null; 
+  }
+
+  const settings = data.pageBy.globalneUstawieniaStrony;
 
   const globalSettings = {
     whatsapp: settings?.whatsapp || "",
@@ -36,14 +41,17 @@ export default function HomeClient({ data }: any) {
       <main className="text-gray-800">
         <TopBar />
         <Header />
+
         <Hero
           kafelki={data.kafelkiStartowe.edges.map((e: any) => e.node.kafelki)}
         />
+
         <Kroki
           steps={data.krokWspPracy.edges.map(
-            (e: any) => e.node.krokiwspolpracy
+            (e: any) => e.node.krokiwspolpracy,
           )}
         />
+
         <NewArrivalsMobileOptimized
           items={data.rosliny.nodes.map((n: any) => ({
             id: n.id,
@@ -52,43 +60,42 @@ export default function HomeClient({ data }: any) {
             available: !!n.roslinki.dostepnosc,
           }))}
         />
+
         <TransportSection
-          items={data.transportItems.nodes.map(
-            (n: any) => n.transportroslin
-          )}
+          items={data.transportItems.nodes.map((n: any) => n.transportroslin)}
           globalSettings={globalSettings}
         />
+
         <AboutGardenSection
           globalSettings={globalSettings}
-          aboutSchoolData={data.page.aboutschool}
+          aboutSchoolData={data.pageBy.aboutschool}
         />
+
         <PlantList
-          categories={data.assortmentBoxes.nodes.map(
-            (n: any, i: number) => ({
-              id: `cat-${i}`,
-              title: n.asortymentBox.nazwaSekcji,
-              count: n.asortymentBox.iloscGatunkow,
-              items: n.asortymentBox.items?.split(","),
-              dodatkowaInformacja: n.asortymentBox.dodatkowaInformacja,
-              icon: FaLeaf,
-            })
-          )}
+          categories={data.assortmentBoxes.nodes.map((n: any, i: number) => ({
+            id: `cat-${i}`,
+            title: n.asortymentBox.nazwaSekcji,
+            count: n.asortymentBox.iloscGatunkow,
+            items: n.asortymentBox.items?.split(","),
+            dodatkowaInformacja: n.asortymentBox.dodatkowaInformacja,
+            icon: FaLeaf,
+          }))}
         />
+
         <Gallery
           galleryItems={data.galleries.nodes.flatMap((g: any) => {
             if (!g?.zdjecia) return [];
+            const arr = Array.isArray(g.zdjecia) ? g.zdjecia : [g.zdjecia];
 
-            const zdjeciaArray = Array.isArray(g.zdjecia)
-              ? g.zdjecia
-              : [g.zdjecia];
-
-            return zdjeciaArray.map((z: any) => ({
+            return arr.map((z: any) => ({
               src: z?.obrazekurl?.node?.sourceUrl || "",
               title: z?.tytulZdjecia || "Zdjęcie",
             }));
           })}
         />
+
         <Map />
+
         <Faq
           items={
             data.faqs?.nodes
@@ -99,6 +106,7 @@ export default function HomeClient({ data }: any) {
               })) || []
           }
         />
+
         <Footer />
       </main>
     </GlobalSettingsProvider>
