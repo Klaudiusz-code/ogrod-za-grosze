@@ -23,7 +23,7 @@ type HeroProps = {
 const icons = [FaLeaf, FaUsers, FaSeedling];
 
 export default function Hero({ kafelki }: HeroProps) {
-  const { numerTelefonu, whatsapp } = useGlobalSettings(); 
+  const { numerTelefonu, whatsapp } = useGlobalSettings();
 
   return (
     <section className="relative bg-white">
@@ -31,7 +31,7 @@ export default function Hero({ kafelki }: HeroProps) {
         <div
           className="
             relative overflow-hidden
-            min-h-[60vh] sm:min-h-[55vh] md:max-w-450
+            min-h-[70vh] sm:min-h-[60vh] md:min-h-[55vh] md:max-w-450
             pt-16 sm:pt-12 md:pt-0
             md:rounded-[28px]
           "
@@ -48,7 +48,9 @@ export default function Hero({ kafelki }: HeroProps) {
 
           <div className="relative z-10 w-full mt-16">
             <div className="max-w-7xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-10">
-              <div className="text-white max-w-xl">
+              
+              {/* LEWA KOLUMNA */}
+              <div className="text-white max-w-xl pb-8 md:pb-0">
                 <span className="inline-block mb-3 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur text-[10px] tracking-[0.25em] uppercase text-green-300">
                   Lokalna szkółka • Aleksandrów
                 </span>
@@ -57,10 +59,40 @@ export default function Hero({ kafelki }: HeroProps) {
                   Najlepsze rośliny dla Twojego ogrodu
                 </h1>
 
-                <p className="text-gray-200 text-base sm:text-lg mb-7 max-w-lg">
+                <p className="text-gray-200 text-base sm:text-lg mb-6 max-w-lg">
                   Zdrowe drzewa, krzewy i byliny prosto z lokalnej szkółki.
                   Doradzimy i pomożemy wybrać najlepiej.
                 </p>
+
+                {/* --- MOBILE TILES (Rząd poziomy, minimalizm) --- */}
+                <div className="flex lg:hidden w-full gap-3 mb-8">
+                  {Array.isArray(kafelki) &&
+                    kafelki.map((item, index) => {
+                      const Icon = icons[index];
+                      if (!Icon) return null;
+
+                      return (
+                        <div
+                          key={index}
+                          className="
+                            flex-1 group
+                            bg-white/5 border border-white/10
+                            rounded-xl p-3
+                            flex flex-col items-center justify-center text-center
+                            hover:bg-white/10 transition-colors
+                          "
+                        >
+                          <div className="text-green-400 text-2xl mb-2 group-hover:text-white transition-colors">
+                            <Icon />
+                          </div>
+                          <h3 className="font-bold text-[10px] uppercase tracking-wider text-white leading-tight">
+                            {item.tytulKafelka}
+                          </h3>
+                        </div>
+                      );
+                    })}
+                </div>
+                {/* --- KONIEC MOBILE TILES --- */}
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                   <Link
@@ -92,6 +124,7 @@ export default function Hero({ kafelki }: HeroProps) {
                 </div>
               </div>
 
+              {/* PRAWA KOLUMNA - ORYGINAŁ (DESKTOP) */}
               <div className="hidden lg:flex flex-col gap-5 justify-center">
                 {Array.isArray(kafelki) &&
                   kafelki.map((item, index) => {
@@ -119,6 +152,7 @@ export default function Hero({ kafelki }: HeroProps) {
                     );
                   })}
               </div>
+
             </div>
           </div>
         </div>
