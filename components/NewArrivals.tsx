@@ -62,22 +62,18 @@ export default function NewArrivalsMobileOptimized({ items }: NewArrivalsProps) 
           <Swiper
             onSwiper={setSwiper}
             
-            // POPRAWKA 1: Wygładzenie ruchu (dłuższy czas animacji)
-            speed={800}
+            speed={500}
             
             spaceBetween={20}
             slidesPerView={1.1}
             grabCursor={true}
             loop={items.length > 2}
             
-            // POPRAWKA 2: Kluczowe dla płynności przy ułamkowych slajdach i loop
             watchSlidesProgress={true} 
             
-            // Reakcja na ładowanie obrazów
             observer={true} 
             observeParents={true}
             
-            // Zabezpieczenie przed konfliktami przy szybkim klikaniu
             preventInteractionOnTransition={true}
             
             autoplay={{ delay: 4000, disableOnInteraction: false }}
@@ -99,7 +95,6 @@ export default function NewArrivalsMobileOptimized({ items }: NewArrivalsProps) 
           >
             {items.map((item) => (
               <SwiperSlide key={item.id} className="!h-auto py-4 pb-12">
-                {/* POPRAWKA 3: Styl inline wymuszający sprzętowe przyspieszenie GPU (naprawia "szarpanie" obrazków przy ruchu) */}
                 <div 
                   className="group relative h-[400px] md:h-[600px] w-full bg-neutral-900 rounded-3xl overflow-hidden cursor-pointer border border-neutral-800"
                   style={{ willChange: 'transform' }}

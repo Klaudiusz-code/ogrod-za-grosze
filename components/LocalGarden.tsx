@@ -101,9 +101,7 @@ export default function AboutGardenSection({
 
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-[1.1]">
                 {aboutSchoolData.tytulSekcji} <br />
-                <span className="text-green-700 italic font-serif">
-                  tradycję od pokoleń
-                </span>
+                
               </h2>
 
               <p className="text-lg text-gray-600 leading-relaxed">
